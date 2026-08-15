@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>EventHive — Wireframes</title>
+<style>
+  :root{
+    --ink:#1f2328;
+    --line:#8a8f98;
+    --line-soft:#c6cad2;
+    --panel:#ffffff;
+    --page:#eef0f3;
+    --accent:#3b4a6b;
+    --label:#6b7280;
+    --mono: 'Courier New', Courier, monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', Arial, sans-serif;
+    background:var(--page);
+    color:var(--ink);
+  }
+  header{
+    padding:18px 28px;
+    border-bottom:2px solid var(--ink);
+    background:var(--panel);
+  }
+  header h1{
+    margin:0 0 4px 0;
+    font-size:20px;
+    letter-spacing:0.5px;
+  }
+  header p{
+    margin:0;
+    font-size:12px;
+    color:var(--label);
+    font-family:var(--mono);
+  }
+  nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0;
+    background:var(--panel);
+    border-bottom:1px solid var(--line-soft);
+  }
+  nav button{
+    padding:12px 18px;
+    border:none;
+    background:transparent;
+    font-size:13px;
+    font-family:var(--mono);
+    cursor:pointer;
+    color:var(--label);
+    border-bottom:3px solid transparent;
+  }
+  nav button.active{
+    color:var(--ink);
+    border-bottom:3px solid var(--accent);
+    font-weight:bold;
+  }
+  main{
+    padding:26px;
+    display:flex;
+    justify-content:center;
+  }
+  .screen{
+    display:none;
+    width:100%;
+    max-width:980px;
+    background:var(--panel);
+    border:1.5px solid var(--ink);
+  }
+  .screen.active{ display:block; }
+  .tag{
+    position:relative;
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--label);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  .box{
+    border:1.5px dashed var(--line);
+    padding:10px;
+    position:relative;
+    background:repeating-linear-gradient(135deg, #fafbfc, #fafbfc 8px, #f2f3f5 8px, #f2f3f5 16px);
+  }
+  .box .tag{ margin-bottom:6px; display:block; }
+  .placeholder-img{
+    height:100%;
+    min-height:60px;
+    border:1.5px dashed var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--line);
+    font-size:11px;
+    font-family:var(--mono);
+    background:
+      linear-gradient(135deg, transparent 47%, var(--line) 47%, var(--line) 53%, transparent 53%),
+      linear-gradient(45deg, transparent 47%, var(--line) 47%, var(--line) 53%, transparent 53%);
+  }
+  .btn{
+    display:inline-block;
+    padding:7px 14px;
+    border:1.5px solid var(--ink);
+    font-size:12px;
+    font-family:var(--mono);
+    background:#fff;
+    text-align:center;
+  }
+  .btn.solid{ background:var(--ink); color:#fff; }
+  .row{ display:flex; gap:10px; }
+  .col{ flex:1; }
+  .field{
+    border:1.5px solid var(--line);
+    padding:8px 10px;
+    font-size:12px;
+    font-family:var(--mono);
+    color:var(--label);
+    background:#fff;
+  }
+  .chip{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:4px 10px;
+    font-size:11px;
+    font-family:var(--mono);
+    color:var(--label);
+  }
+  .notes{
+    background:#fbf7ea;
+    border-top:1.5px solid var(--ink);
+    padding:14px 18px;
+    font-size:12px;
+    line-height:1.6;
+  }
+  .notes b{ font-family:var(--mono); }
+  table.mock{ width:100%; border-collapse:collapse; font-size:12px; font-family:var(--mono); }
+  table.mock th, table.mock td{ border:1px solid var(--line-soft); padding:6px 8px; text-align:left; }
+  table.mock th{ background:#f4f5f7; }
+  .sidebar-item{
+    padding:8px 10px;
+    font-size:12px;
+    font-family:var(--mono);
+    border-left:3px solid transparent;
+  }
+  .sidebar-item.active{ border-left:3px solid var(--accent); background:#eef1f6; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>EventHive — Low-Fidelity Wireframes</h1>
+  <p>Structural layout only — no visual branding pass. Use as a base to trace into Figma/Adobe XD.</p>
+</header>
+
+<nav id="tabs"></nav>
+<main id="screens"></main>
+
+<script>
+const screens = [
+  {
+    id: 'home',
+    label: '1. Home / Listing',
+    body: `
+      <div style="padding:20px;">
+        <div class="row" style="margin-bottom:14px;">
+          <div class="field col">Search events, cities, categories…</div>
+          <div class="btn">Search</div>
+        </div>
+        <div class="row" style="margin-bottom:14px; gap:8px;">
+          <span class="chip">All</span><span class="chip">Music</span><span class="chip">Tech</span>
+          <span class="chip">Sports</span><span class="chip">Workshops</span>
+        </div>
+        <div class="box" style="margin-bottom:14px;">
+          <span class="tag">hero banner</span>
+          <div class="placeholder-img" style="height:110px;"></div>
+        </div>
+        <div class="tag" style="margin-bottom:8px;">event card grid — repeats N times</div>
+        <div class="row" style="margin-bottom:10px;">
+          <div class="col box">
+            <span class="tag">event card</span>
+            <div class="placeholder-img" style="height:70px; margin-bottom:8px;"></div>
+            <div style="font-size:12px; font-weight:bold;">Event title</div>
+            <div style="font-size:11px; color:var(--label);">Date · Location · from $--</div>
+          </div>
+          <div class="col box">
+            <span class="tag">event card</span>
+            <div class="placeholder-img" style="height:70px; margin-bottom:8px;"></div>
+            <div style="font-size:12px; font-weight:bold;">Event title</div>
+            <div style="font-size:11px; color:var(--label);">Date · Location · from $--</div>
+          </div>
+          <div class="col box">
+            <span class="tag">event card</span>
+            <div class="placeholder-img" style="height:70px; margin-bottom:8px;"></div>
+            <div style="font-size:12px; font-weight:bold;">Event title</div>
+            <div style="font-size:11px; color:var(--label);">Date · Location · from $--</div>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <span class="btn">‹ Prev</span> <span class="btn">1</span> <span class="btn">2</span> <span class="btn">Next ›</span>
+        </div>
+      </div>
+    `,
+    notes: `<b>Components:</b> global search bar, category filter chips, hero/featured banner, paginated event card grid (image, title, date, location, starting price).<br/>
+      <b>Primary action:</b> clicking a card → Event Details page.`
+  },
+  {
+    id: 'details',
+    label: '2. Event Details',
+    body: `
+      <div style="padding:20px;">
+        <div class="box" style="margin-bottom:14px;">
+          <span class="tag">banner image (uploaded by organizer)</span>
+          <div class="placeholder-img" style="height:150px;"></div>
+        </div>
+        <div class="row" style="gap:18px;">
+          <div class="col" style="flex:2;">
+            <div style="font-size:16px; font-weight:bold; margin-bottom:6px;">Event Title</div>
+            <div style="font-size:12px; color:var(--label); margin-bottom:12px;">Date &amp; time · Location (map link) · Category chip</div>
+            <div class="box" style="margin-bottom:14px;">
+              <span class="tag">description</span>
+              <div style="font-size:12px; color:var(--label);">Full event description text block…</div>
+            </div>
+            <div class="box">
+              <span class="tag">reviews (public read, attendee CRUD on own review)</span>
+              <div style="font-size:12px; color:var(--label);">★★★★☆ "Great event…" — Attendee name</div>
+              <div style="font-size:12px; color:var(--label);">★★★☆☆ "Good, but…" — Attendee name</div>
+            </div>
+          </div>
+          <div class="col box" style="flex:1; align-self:flex-start;">
+            <span class="tag">ticket selector</span>
+            <table class="mock" style="margin-bottom:10px;">
+              <tr><th>Type</th><th>Price</th><th>Qty</th></tr>
+              <tr><td>General</td><td>$--</td><td>[ - 1 + ]</td></tr>
+              <tr><td>VIP</td><td>$--</td><td>[ - 0 + ]</td></tr>
+            </table>
+            <div class="btn solid" style="width:100%; text-align:center;">Book Now</div>
+          </div>
+        </div>
+      </div>
+    `,
+    notes: `<b>Components:</b> banner image, title/date/location header, description block, ticket-type selector (qty steppers), sticky "Book Now" CTA, reviews list.<br/>
+      <b>Primary action:</b> "Book Now" → Checkout flow.`
+  },
+  {
+    id: 'auth',
+    label: '3. Login / Register',
+    body: `
+      <div style="padding:40px; display:flex; justify-content:center;">
+        <div class="box" style="width:320px;">
+          <span class="tag">auth form (toggle: Login / Register)</span>
+          <div class="row" style="margin-bottom:10px; gap:0;">
+            <div class="btn solid col" style="text-align:center;">Login</div>
+            <div class="btn col" style="text-align:center;">Register</div>
+          </div>
+          <div class="field" style="margin-bottom:8px;">Email</div>
+          <div class="field" style="margin-bottom:8px;">Password</div>
+          <div class="btn solid" style="width:100%; text-align:center; margin-bottom:8px;">Log In</div>
+          <div style="font-size:11px; color:var(--label); text-align:center;">Forgot password? · New here? Register</div>
+        </div>
+      </div>
+    `,
+    notes: `<b>Components:</b> tabbed Login/Register form, email + password fields, submit button, forgot-password and switch-mode links.<br/>
+      <b>Behavior:</b> Register defaults new accounts to the Attendee role; email verification sent on submit.`
+  },
+  {
+    id: 'organizer',
+    label: '4. Organizer Dashboard',
+    body: `
+      <div class="row" style="min-height:380px;">
+        <div style="width:150px; border-right:1.5px solid var(--ink); padding:14px 0;">
+          <div class="sidebar-item active">My Events</div>
+          <div class="sidebar-item">Bookings</div>
+          <div class="sidebar-item">Profile</div>
+        </div>
+        <div style="flex:1; padding:18px;">
+          <div class="row" style="justify-content:space-between; margin-bottom:12px;">
+            <span class="tag">my events</span>
+            <div class="btn solid">+ Add Event</div>
+          </div>
+          <table class="mock" style="margin-bottom:16px;">
+            <tr><th>Event</th><th>Date</th><th>Status</th><th>Tickets sold</th><th>Actions</th></tr>
+            <tr><td>Event A</td><td>--/--</td><td>Published</td><td>42 / 100</td><td>Edit · Delete</td></tr>
+            <tr><td>Event B</td><td>--/--</td><td>Draft</td><td>0 / 50</td><td>Edit · Delete</td></tr>
+          </table>
+          <div class="box">
+            <span class="tag">add / edit event form</span>
+            <div class="row" style="gap:8px; margin-bottom:8px;">
+              <div class="field col">Title</div>
+              <div class="field col">Category</div>
+            </div>
+            <div class="field" style="margin-bottom:8px;">Description</div>
+            <div class="row" style="gap:8px; margin-bottom:8px;">
+              <div class="field col">Date / time</div>
+              <div class="field col">Location</div>
+            </div>
+            <div class="placeholder-img" style="height:50px; margin-bottom:8px;"></div>
+            <span class="tag">banner image upload — JPG/PNG/WEBP, max 5MB</span>
+            <div class="btn solid" style="margin-top:8px;">Save Event</div>
+          </div>
+        </div>
+      </div>
+    `,
+    notes: `<b>Components:</b> sidebar nav, events table scoped to the logged-in organizer only (status + sales), add/edit form with image upload and ticket-type builder.<br/>
+      <b>Authorization:</b> only visible/reachable for accounts with the Organizer role; Edit/Delete only act on events owned by this organizer.`
+  },
+  {
+    id: 'admin',
+    label: '5. Admin Dashboard',
+    body: `
+      <div class="row" style="min-height:380px;">
+        <div style="width:150px; border-right:1.5px solid var(--ink); padding:14px 0;">
+          <div class="sidebar-item active">Organizer Applications</div>
+          <div class="sidebar-item">Users</div>
+          <div class="sidebar-item">Events</div>
+          <div class="sidebar-item">Categories</div>
+        </div>
+        <div style="flex:1; padding:18px;">
+          <span class="tag">organizer applications (approve / reject)</span>
+          <table class="mock" style="margin-bottom:16px;">
+            <tr><th>Applicant</th><th>Document</th><th>Submitted</th><th>Action</th></tr>
+            <tr><td>User A</td><td>doc.pdf</td><td>--/--</td><td>Approve · Reject</td></tr>
+            <tr><td>User B</td><td>id.jpg</td><td>--/--</td><td>Approve · Reject</td></tr>
+          </table>
+          <span class="tag">users</span>
+          <table class="mock">
+            <tr><th>Name</th><th>Email</th><th>Role</th><th>Action</th></tr>
+            <tr><td>User A</td><td>a@mail.com</td><td>Attendee</td><td>Change role · Suspend</td></tr>
+            <tr><td>User B</td><td>b@mail.com</td><td>Organizer</td><td>Change role · Suspend</td></tr>
+          </table>
+        </div>
+      </div>
+    `,
+    notes: `<b>Components:</b> sidebar nav, organizer-application review queue (with uploaded document preview), user management table (role change / suspend), event moderation table, category CRUD.<br/>
+      <b>Authorization:</b> restricted entirely to accounts with the Admin role.`
+  }
+];
+
+const tabsEl = document.getElementById('tabs');
+const screensEl = document.getElementById('screens');
+
+screens.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.textContent = s.label;
+  btn.className = i === 0 ? 'active' : '';
+  btn.onclick = () => selectScreen(s.id);
+  tabsEl.appendChild(btn);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'screen' + (i === 0 ? ' active' : '');
+  wrap.id = 'screen-' + s.id;
+  wrap.innerHTML = s.body + `<div class="notes">${s.notes}</div>`;
+  screensEl.appendChild(wrap);
+});
+
+function selectScreen(id) {
+  document.querySelectorAll('#tabs button').forEach((b, i) => {
+    b.classList.toggle('active', screens[i].id === id);
+  });
+  document.querySelectorAll('.screen').forEach(el => {
+    el.classList.toggle('active', el.id === 'screen-' + id);
+  });
+}
+</script>
+
+</body>
+</html>
