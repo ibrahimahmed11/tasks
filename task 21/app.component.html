@@ -1,0 +1,51 @@
+<div class="page">
+  <h1>Shopping Cart — Angular Signals</h1>
+
+  <!-- Products list -->
+  <section class="panel">
+    <h2>Products</h2>
+    <ul class="product-list">
+      @for (product of availableProducts; track product.id) {
+        <li class="product-item">
+          <span class="product-name">{{ product.name }}</span>
+          <span class="product-price">{{ product.price | currency }}</span>
+          <button
+            type="button"
+            class="btn"
+            [disabled]="isInCart(product.id)"
+            (click)="addToCart(product)"
+          >
+            {{ isInCart(product.id) ? 'Added' : 'Add To Cart' }}
+          </button>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Cart section -->
+  <section class="panel cart">
+    <h2>Cart</h2>
+
+    @if (cart().length === 0) {
+      <p class="empty-state">Your cart is empty</p>
+    } @else {
+      <ul class="cart-list">
+        @for (product of cart(); track product.id) {
+          <li class="cart-item">
+            <span class="product-name">{{ product.name }}</span>
+            <span class="product-price">{{ product.price | currency }}</span>
+            <button type="button" class="btn danger" (click)="removeFromCart(product.id)">
+              Remove
+            </button>
+          </li>
+        }
+      </ul>
+
+      <div class="total-row">
+        <strong>Total:</strong> {{ totalPrice() | currency }}
+      </div>
+
+      <button type="button" class="btn clear-btn" (click)="clearCart()">Clear Cart</button>
+    }
+  </section>
+</div>
