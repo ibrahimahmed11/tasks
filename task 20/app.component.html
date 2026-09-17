@@ -1,0 +1,149 @@
+<div class="page">
+  <h1>Team Manager</h1>
+
+  <!-- 2. Add New Team Members -->
+  <section class="panel">
+    <h2>Add Team Member</h2>
+    <form (ngSubmit)="addMember()" novalidate>
+      <div class="field">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="newMember.name"
+          name="name"
+          placeholder="e.g. Ahmed"
+        />
+        @if (formErrors.name) {
+          <span class="error">{{ formErrors.name }}</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="age">Age</label>
+        <input
+          id="age"
+          type="number"
+          [(ngModel)]="newMember.age"
+          name="age"
+          placeholder="e.g. 28"
+        />
+        @if (formErrors.age) {
+          <span class="error">{{ formErrors.age }}</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="department">Department</label>
+        <select id="department" [(ngModel)]="newMember.department" name="department">
+          @for (dept of departments; track dept) {
+            <option [value]="dept">{{ dept }}</option>
+          }
+        </select>
+        @if (formErrors.department) {
+          <span class="error">{{ formErrors.department }}</span>
+        }
+      </div>
+
+      <div class="field checkbox-field">
+        <label>
+          <input type="checkbox" [(ngModel)]="newMember.available" name="available" />
+          Available
+        </label>
+      </div>
+
+      <button type="submit" class="btn primary">Add Member</button>
+    </form>
+  </section>
+
+  <!-- 3. Filter + 4. View selector -->
+  <section class="controls">
+    <div class="field">
+      <label for="filter">Filter by department</label>
+      <select id="filter" [(ngModel)]="selectedDepartment" name="filter">
+        <option value="All">All Departments</option>
+        @for (dept of departments; track dept) {
+          <option [value]="dept">{{ dept }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="view-toggle">
+      <button
+        type="button"
+        class="btn"
+        [class.active]="viewMode === 'card'"
+        (click)="setViewMode('card')"
+      >
+        Card View
+      </button>
+      <button
+        type="button"
+        class="btn"
+        [class.active]="viewMode === 'list'"
+        (click)="setViewMode('list')"
+      >
+        List View
+      </button>
+    </div>
+  </section>
+
+  <!-- 1. Display Team Members (via card/list views) -->
+  <section class="members">
+    @if (teamMembers.length === 0) {
+      <p class="empty-state">No team members yet — add your first one above.</p>
+    } @else if (filteredMembers.length === 0) {
+      <p class="empty-state">No members match the "{{ selectedDepartment }}" filter.</p>
+    } @else {
+      @switch (viewMode) {
+        @case ('card') {
+          <div class="card-grid">
+            @for (member of filteredMembers; track member.id) {
+              <div
+                class="card"
+                [class.available]="member.available"
+                [class.unavailable]="!member.available"
+              >
+                <div class="card-row"><strong>Name:</strong> {{ member.name }}</div>
+                <div class="card-row"><strong>Age:</strong> {{ member.age }}</div>
+                <div class="card-row"><strong>Department:</strong> {{ member.department }}</div>
+                <div class="card-row">
+                  <strong>Status:</strong>
+                  <span class="status-badge">
+                    {{ member.available ? 'Available' : 'Unavailable' }}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  class="btn toggle-btn"
+                  (click)="toggleAvailability(member.id)"
+                >
+                  Toggle Status
+                </button>
+              </div>
+            }
+          </div>
+        }
+        @case ('list') {
+          <ul class="member-list">
+            @for (member of filteredMembers; track member.id) {
+              <li [class.available]="member.available" [class.unavailable]="!member.available">
+                <span>
+                  {{ member.name }} - {{ member.department }} -
+                  {{ member.available ? '✔️' : '❌' }}
+                </span>
+                <button
+                  type="button"
+                  class="btn toggle-btn small"
+                  (click)="toggleAvailability(member.id)"
+                >
+                  Toggle
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      }
+    }
+  </section>
+</div>
