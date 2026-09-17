@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Calculus II",
+    "code": "MATH 204",
+    "color": "coral",
+    "progress": 74,
+    "next": "Problem set · today"
+  },
+  {
+    "id": 2,
+    "name": "Machine Learning",
+    "code": "CS 315",
+    "color": "violet",
+    "progress": 58,
+    "next": "Lecture · 10:00 AM"
+  },
+  {
+    "id": 3,
+    "name": "Modern History",
+    "code": "HIST 112",
+    "color": "gold",
+    "progress": 41,
+    "next": "Essay outline · tomorrow"
+  },
+  {
+    "id": 1789239613640,
+    "name": "machine learning",
+    "code": "cs 101",
+    "color": "coral",
+    "progress": 0,
+    "next": "No upcoming work yet"
+  },
+  {
+    "id": 1789242096189,
+    "name": "machine learningg",
+    "code": "cs 1011",
+    "color": "violet",
+    "progress": 0,
+    "next": "No upcoming work yet"
+  }
+]
