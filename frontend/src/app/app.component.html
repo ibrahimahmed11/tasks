@@ -1,0 +1,105 @@
+<main class="page">
+  <section class="auth-card" *ngIf="!user">
+    <p class="eyebrow">StudyFlow</p>
+    <h1>{{ authMode === 'login' ? 'Welcome back.' : 'Create your account.' }}</h1>
+    <p class="subtitle">Log in to access your courses and tasks.</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+    <form class="form" (ngSubmit)="authenticate()">
+      <input *ngIf="authMode === 'register'" [(ngModel)]="authForm.name" name="name" placeholder="Full name" required>
+      <input [(ngModel)]="authForm.email" name="email" type="email" placeholder="Email address" required>
+      <input [(ngModel)]="authForm.password" name="password" type="password" placeholder="Password (6+ characters)" required>
+      <button type="submit">{{ authMode === 'login' ? 'Log in' : 'Register' }}</button>
+    </form>
+    <button class="link-button" (click)="authMode = authMode === 'login' ? 'register' : 'login'; error = ''">
+      {{ authMode === 'login' ? 'Need an account? Register' : 'Already registered? Log in' }}
+    </button>
+  </section>
+
+  <ng-container *ngIf="user">
+  <header class="hero">
+    <div class="brand">
+      <p class="eyebrow">StudyFlow</p>
+      <h1>Your learning, in one clear view.</h1>
+      <p class="subtitle">Courses, tasks, and progress backed by your local MongoDB API.</p>
+    </div>
+    <nav class="navbar" aria-label="Main navigation">
+      <span class="greeting">Hi, {{ user.name }}<small *ngIf="user.isAdmin"> · Admin</small></span>
+      <button class="menu-toggle" (click)="showNavMenu = !showNavMenu" [attr.aria-expanded]="showNavMenu">
+        {{ showNavMenu ? 'Close' : 'Menu' }}
+      </button>
+      <div class="nav-menu" [class.open]="showNavMenu">
+        <button class="profile-button" (click)="showProfile = !showProfile; showNavMenu = false">Profile</button>
+        <button class="utility-button" (click)="activePanel = activePanel === 'settings' ? null : 'settings'; showNavMenu = false">Settings</button>
+        <button class="utility-button" (click)="activePanel = activePanel === 'notifications' ? null : 'notifications'; showNavMenu = false">Notifications</button>
+        <button class="utility-button" (click)="activePanel = activePanel === 'help' ? null : 'help'; showNavMenu = false">Help</button>
+        <button class="refresh" (click)="logout()">Log out</button>
+      </div>
+    </nav>
+  </header>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <p class="loading" *ngIf="loading">Loading your dashboard...</p>
+
+  <section class="profile-card" *ngIf="showProfile && user">
+    <div>
+      <p class="eyebrow">Account profile</p>
+      <h2>{{ user.name }}</h2>
+      <p>{{ user.email }}</p>
+      <span class="role">{{ user.isAdmin ? 'Administrator' : 'User' }}</span>
+    </div>
+    <button class="refresh" (click)="logout()">Log out</button>
+  </section>
+
+  <section class="profile-card utility-card" *ngIf="activePanel === 'settings'">
+    <div><p class="eyebrow">Settings</p><h2>Account settings</h2><p>Your StudyFlow account is connected to the local backend and MongoDB.</p></div>
+  </section>
+
+  <section class="profile-card utility-card" *ngIf="activePanel === 'notifications'">
+    <div><p class="eyebrow">Notifications</p><h2>All caught up</h2><p>You have no new notifications right now.</p></div>
+  </section>
+
+  <section class="profile-card utility-card" *ngIf="activePanel === 'help'">
+    <div><p class="eyebrow">Help</p><h2>Need help?</h2><p>Use Refresh to reload your dashboard. Contact the administrator for course or task changes.</p></div>
+  </section>
+
+  <section class="stats" *ngIf="!loading">
+    <article><strong>{{ courses.length }}</strong><span>Courses</span></article>
+    <article><strong>{{ tasks.length }}</strong><span>Total tasks</span></article>
+    <article><strong>{{ completedTasks }}</strong><span>Completed</span></article>
+  </section>
+
+  <section class="grid" *ngIf="!loading">
+    <div class="panel">
+      <div class="panel-heading"><h2>Courses</h2><div class="heading-actions"><span>{{ courses.length }} active</span><button *ngIf="user.isAdmin" class="add" (click)="showCourseForm = !showCourseForm">{{ showCourseForm ? 'Cancel' : 'Add course' }}</button></div></div>
+      <div class="course" *ngFor="let course of courses">
+        <div class="course-top"><div><h3>{{ course.name }}</h3><small>{{ course.code }}</small></div><b>{{ course.progress }}%</b><button *ngIf="user.isAdmin" class="remove" (click)="removeCourse(course)">Remove</button></div>
+        <div class="progress"><span [style.width.%]="course.progress"></span></div>
+        <small>{{ course.next }}</small>
+      </div>
+      <form class="form" *ngIf="user.isAdmin && showCourseForm" (ngSubmit)="addCourse()">
+        <h3>Add a course</h3>
+        <input [(ngModel)]="newCourse.name" name="courseName" placeholder="Course name" required>
+        <input [(ngModel)]="newCourse.code" name="courseCode" placeholder="Course code" required>
+        <button type="submit">Save course</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <div class="panel-heading"><h2>Tasks</h2><div class="heading-actions"><span>{{ completedTasks }}/{{ tasks.length }} complete</span><button *ngIf="user.isAdmin" class="add" (click)="showTaskForm = !showTaskForm">{{ showTaskForm ? 'Cancel' : 'Add task' }}</button></div></div>
+      <div class="task" *ngFor="let task of tasks">
+        <button class="check" [class.done]="task.done" (click)="toggleTask(task)" [attr.aria-label]="task.done ? 'Mark incomplete' : 'Mark complete'">
+          {{ task.done ? '✓' : '' }}
+        </button>
+        <div class="task-details"><h3 [class.struck]="task.done">{{ task.title }}</h3><small>{{ task.course }} · {{ task.due }} · {{ task.type }}</small></div>
+        <button *ngIf="user.isAdmin" class="remove" (click)="removeTask(task)">Remove</button>
+      </div>
+      <form class="form" *ngIf="user.isAdmin && showTaskForm" (ngSubmit)="addTask()">
+        <h3>Add a task</h3>
+        <input [(ngModel)]="newTask.title" name="taskTitle" placeholder="Task title" required>
+        <input [(ngModel)]="newTask.course" name="taskCourse" placeholder="Course">
+        <button type="submit">Save task</button>
+      </form>
+    </div>
+  </section>
+  </ng-container>
+</main>
